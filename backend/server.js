@@ -53,7 +53,7 @@ app.post("/products", upload.single("image"), async (req, res) => {
         ContentType: req.file.mimetype,
 
       }).promise();
-      image_url = `https://${BUCKET_NAME}.s3.amazonaws.com/${file_name}`;
+      image_url = `https://${BUCKET_NAME}.s3.amazonaws.com/a2-product-images${file_name}`;
     }
     
     const product = { product_id, name, description, price, category, stock, image_url };
