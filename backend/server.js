@@ -48,7 +48,7 @@ app.post("/products", upload.single("image"), async (req, res) => {
       const file_name = `${uuid()}-${req.file.originalname}`;
       await S3.upload({
         Bucket: BUCKET_NAME,
-        Key: `/a2-product-images/${file_name}`,
+        Key: `a2-product-images/${file_name}`,
         Body: req.file.buffer,
         ContentType: req.file.mimetype,
 
