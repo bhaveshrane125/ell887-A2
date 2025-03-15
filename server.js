@@ -4,7 +4,7 @@ const AWS = require("aws-sdk");
 const multer = require("multer");
 const cors = require("cors");
 const uuid = require("uuid").v4;
-const config = require("./config.json");
+const config = require("../config.json");
 const app = express();
 const port = 80;
 
