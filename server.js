@@ -75,4 +75,41 @@ app.get("/products", async (req, res) => {
   }
 });
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+app.delete("/products/:id", async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      // Fetch product to get image URL
+      const getParams = {
+        TableName: TABLE_NAME,
+        Key: { product_id: id },
+      };
+      const product = await dynamoDB.get(getParams).promise();
+  
+      if (!product.Item) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+  
+      // Delete from DynamoDB
+      const deleteParams = {
+        TableName: TABLE_NAME,
+        Key: { product_id: id },
+      };
+      await dynamoDB.delete(deleteParams).promise();
+  
+      // Delete image from S3
+      const imageUrl = product.Item.image_url;
+      const imageKey = imageUrl.split("/").pop();
+      const s3Params = { Bucket: BUCKET_NAME, Key: imageKey };
+      await S3.deleteObject(s3Params).promise();
+  
+      res.json({ message: "Product deleted successfully" });
+    } catch (error) {
+      console.error("Delete error:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+  
+  
+  
+app.listen(port,"0.0.0.0" ,() => console.log(`Server running on port ${port}`));
