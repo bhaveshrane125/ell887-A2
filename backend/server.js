@@ -99,7 +99,7 @@ app.delete("/products/:id", async (req, res) => {
   
       // Delete image from S3
       const imageUrl = product.Item.image_url;
-      const imageKey = imageUrl.split("/").pop();
+      const imageKey = 'a2-product-images' + imageUrl.split("/").pop();
       const s3Params = { Bucket: BUCKET_NAME, Key: imageKey };
       await S3.deleteObject(s3Params).promise();
   
